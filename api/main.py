@@ -1,8 +1,12 @@
 """Servico FastAPI: serve o modelo treinado e a pagina web."""
 import os
 import json
+import warnings
 import joblib
 import numpy as np
+
+# mesmo filtro do treino: evita aviso de deprecacao do SVC no log da API
+warnings.filterwarnings("ignore", message=".*probability.*parameter was deprecated.*")
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse

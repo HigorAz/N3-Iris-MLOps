@@ -2,6 +2,12 @@
 avalia -> escolhe o melhor pela metrica -> salva -> registra no MLflow."""
 import os
 import json
+import warnings
+
+# silencia aviso de deprecacao do SVC(probability=True) no sklearn 1.9+
+warnings.filterwarnings("ignore", message=".*probability.*parameter was deprecated.*")
+os.environ.setdefault("GIT_PYTHON_REFRESH", "quiet")  # silencia aviso de git no mlflow
+
 import joblib
 import mlflow
 

@@ -18,6 +18,7 @@ services:
       - mlflow
     environment:
       MLFLOW_TRACKING_URI: http://mlflow:5000
+      GIT_PYTHON_REFRESH: quiet   # silencia aviso do mlflow quando nao ha git na imagem
     volumes:
       - ./models:/app/models
       - ./reports:/app/reports
