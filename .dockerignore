@@ -1,0 +1,10 @@
+docs/
+__pycache__/
+*.pyc
+.venv/
+venv/
+mlruns/
+.git/
+.github/
+tests/
+*.md

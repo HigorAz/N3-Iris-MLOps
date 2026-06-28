@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classificador de Iris</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #f4f6f8; color: #222;
+           display: flex; justify-content: center; padding: 40px 16px; }
+    .card { background: #fff; border-radius: 10px; padding: 28px 32px; max-width: 460px;
+            width: 100%; box-shadow: 0 2px 12px rgba(0,0,0,.08); }
+    h1 { font-size: 1.4rem; margin-top: 0; }
+    label { display: block; margin: 14px 0 4px; font-size: .9rem; }
+    input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    button { margin-top: 20px; width: 100%; padding: 11px; border: 0; border-radius: 6px;
+             background: #2e7d32; color: #fff; font-size: 1rem; cursor: pointer; }
+    button:hover { background: #256628; }
+    #resultado { margin-top: 22px; padding: 16px; border-radius: 6px; background: #eef6ee; display: none; }
+    #especie { font-size: 1.2rem; font-weight: 600; color: #2e7d32; }
+    .prob { display: flex; justify-content: space-between; font-size: .88rem; margin-top: 4px; }
+    .info { font-size: .78rem; color: #777; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🌸 Classificador de Iris</h1>
+    <p>Informe as medidas (cm) e envie ao modelo.</p>
+
+    <label>Comprimento da sépala</label>
+    <input type="number" id="sepal_length" step="0.1" value="5.1">
+    <label>Largura da sépala</label>
+    <input type="number" id="sepal_width" step="0.1" value="3.5">
+    <label>Comprimento da pétala</label>
+    <input type="number" id="petal_length" step="0.1" value="1.4">
+    <label>Largura da pétala</label>
+    <input type="number" id="petal_width" step="0.1" value="0.2">
+
+    <button onclick="prever()">Classificar</button>
+
+    <div id="resultado">
+      <div>Espécie prevista: <span id="especie"></span></div>
+      <div id="probs"></div>
+    </div>
+    <div class="info" id="modelo_info"></div>
+  </div>
+
+  <script>
+    async function carregaInfo() {
+      try {
+        const r = await fetch('/model-info');
+        if (r.ok) {
+          const d = await r.json();
+          document.getElementById('modelo_info').textContent =
+            `Modelo ativo: ${d.modelo} (v${d.versao}) — ${d.metrica_selecao}=${d.metricas[d.metrica_selecao].toFixed(3)}`;
+        }
+      } catch (e) {}
+    }
+
+    async function prever() {
+      const corpo = {
+        sepal_length: parseFloat(sepal_length.value),
+        sepal_width: parseFloat(sepal_width.value),
+        petal_length: parseFloat(petal_length.value),
+        petal_width: parseFloat(petal_width.value),
+      };
+      const r = await fetch('/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(corpo),
+      });
+      if (!r.ok) { alert('Erro: modelo nao disponivel'); return; }
+      const d = await r.json();
+      document.getElementById('especie').textContent = d.especie;
+      document.getElementById('probs').innerHTML = Object.entries(d.probabilidades)
+        .map(([k, v]) => `<div class="prob"><span>${k}</span><span>${(v*100).toFixed(1)}%</span></div>`)
+        .join('');
+      document.getElementById('resultado').style.display = 'block';
+    }
+
+    carregaInfo();
+  </script>
+</body>
+</html>

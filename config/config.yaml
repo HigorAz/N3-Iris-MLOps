@@ -1,0 +1,19 @@
+# Configuracoes gerais do pipeline
+dados:
+  caminho: data/iris.csv
+  alvo: species
+  test_size: 0.2
+  random_state: 42
+
+# Metrica usada para escolher o melhor modelo automaticamente
+# opcoes: accuracy, precision, recall, f1
+selecao:
+  metrica: f1
+
+saidas:
+  modelos: models
+  relatorios: reports
+
+mlflow:
+  tracking_uri: ""        # vazio = usa pasta local ./mlruns; no docker e definido por env var
+  experimento: iris-classificacao

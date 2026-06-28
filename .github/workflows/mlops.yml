@@ -1,0 +1,44 @@
+name: MLOps - Iris
+
+# Ciclo automatizado: testa, retreina e atualiza o modelo no repositorio
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"   # toda segunda-feira as 06h UTC (retreino periodico)
+  workflow_dispatch:        # permite disparar manualmente
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configura Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instala dependencias
+        run: pip install -r requirements.txt
+
+      - name: Testes
+        run: pytest -q
+
+      - name: Retreina o modelo
+        run: python -m src.train
+
+      - name: Testa a API com o novo modelo
+        run: pytest -q tests/test_api.py
+
+      - name: Commita o modelo atualizado
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add models/
+          if git diff --staged --quiet; then
+            echo "Modelo sem alteracoes."
+          else
+            git commit -m "Retreino automatico do modelo [skip ci]"
+            git push
+          fi

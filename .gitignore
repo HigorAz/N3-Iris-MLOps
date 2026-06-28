@@ -1,0 +1,18 @@
+# material de outras aulas - nao faz parte da entrega
+docs/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# saidas geradas
+mlruns/
+mlflow.db
+reports/
+*.log
+
+# modelos: mantemos os artefatos versionados para o deploy,
+# mas ignoramos checkpoints temporarios
+models/*.tmp
