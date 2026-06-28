@@ -11,6 +11,8 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write   # necessario para commitar o modelo retreinado
     steps:
       - uses: actions/checkout@v4
 
