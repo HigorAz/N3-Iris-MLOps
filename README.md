@@ -5,6 +5,8 @@ completo de MLOps: treino de modelos de classificação, seleção automática d
 serviço de predição (API + página web), rastreamento de experimentos com MLflow,
 empacotamento em Docker e ciclo de retreino automatizado via GitHub Actions.
 
+#### Alunos: Higor Azevedo, Nathan Cielusinski e Nicolas Gustavo Conte.
+
 Base de dados: **Iris** (fonte: https://www.kaggle.com/datasets/arshid/iris-flower-dataset).
 
 ## O que o projeto faz
