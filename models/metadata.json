@@ -37,7 +37,7 @@
     "Iris-versicolor",
     "Iris-virginica"
   ],
-  "versao": 4,
+  "versao": 5,
   "comparacao": [
     {
       "nome": "random_forest",
